@@ -168,5 +168,50 @@ urlpatterns = [
 ]
 ```
 
-then you can directly see about's in http://127.0.0.1:8000/about/ link
+- then you can directly see about's in http://127.0.0.1:8000/about/ link
+
+- you can create multiple apps in a single project like blog or shop
+- make sure to add urls.py in apps folders and also views.py 
+- then you have to register your app name in settings.py installed apps
+- after that you have to change in urls.py of the main project 
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('blog/', include('blog.urls')),
+    path('shop/', include('shop.urls'))
+]
+```
+
+## URL Parameters (path, re_path, kwars)
+
+- if you have paramter in views 
+
+```python
+def post_details(request, post_id): # post_id is int
+    return HttpResponse(f"<h1>Details of post {post_id}</h1>")
+
+def user_profile(request, username): # username is string
+    return HttpResponse(f"<h1>Profile of user {username}</h1>")
+```
+
+- you can define it in urls file using
+
+```python
+path('post/<int:post_id>/', views.post_details, name="post_details"),
+path('user/<str:username>/', views.user_profile, name="user_profile"),
+```
+
+- name of parameters should match with path (user/<str:username> -> username)
+
+- then you can test dynamic route using
+
+```python
+http://127.0.0.1:8000/blog/post/2/ 
+http://127.0.0.1:8000/blog/user/aman/
+```
+
 
