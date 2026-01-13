@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 
 # Create your views here.
 def home(request):
@@ -21,3 +22,6 @@ def article_by_year(request, year):
 
 def article_details(request, **kwargs):
     return HttpResponse(f"<h1>Articles from {kwargs}</h1>")
+
+def post_list(request):
+    return render(request, 'blog/post_list.html')

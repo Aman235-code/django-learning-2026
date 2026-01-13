@@ -270,4 +270,68 @@ path('article/<int:year>/<int:month>/<int:day>', views.article_details, name="ar
 http://127.0.0.1:8000/blog/article/2026/4/30
 ```
 
+## Templates Folder 
 
+- html file used to display dynamic data (variables)
+- used to display the ui
+- Template Use Types -> 2 types
+- project level template & app level template
+- app level -> each app have their own template and folder staructure
+- project level -> centralized template common to all the app templates
+
+### Project level template setup
+
+- create templates folder in the root level 
+- create html file inside this folder
+- goto settings.py search for TEMPLATES (54)
+- give the path for DIRS
+
+```python
+'DIRS': [os.path.join(BASE_DIR, 'templates')],
+# or
+'DIRS': [BASE_DIR / 'templates'], # no need to import os here
+```
+- you can create views file in projects folder and make changes i urls file
+- then in views file you can pass templates using
+
+```python
+def home(request):
+    return render(request, 'home.html')
+```
+
+- no need to write templates/home.html because it's already set as BASE_URL
+
+```python
+# home.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My first web page</title>
+</head>
+<body>
+   <h1 style="color:red">Hello world</h1>
+   <p>This is my first project</p> 
+</body>
+</html>
+```
+
+### App level template setup
+
+- after creating project and apps configure settings.py
+- create templates folder in project's folder and create base.html file
+- this template is used by all the apps
+- you have to create templates folder in both the apps folder, also configure urls.py
+
+```python
+# in blogs folder
+from django.shortcuts import render
+
+# templates/blog/post_list,html
+def post_list(request):
+    return render(request, 'blog/post_list.html')
+```
+
+- here we can only render the html pages created inside the apps folder
+- the templates we are creating inside the main project's folder is inherited by all the oter apps
