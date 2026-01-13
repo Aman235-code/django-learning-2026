@@ -216,4 +216,35 @@ http://127.0.0.1:8000/blog/post/2/
 http://127.0.0.1:8000/blog/user/aman/
 ```
 
+## repath
+
+- related to regex (search feature)
+- helpful in complex patterns
+- you have to import in in urls.py using 
+
+```python
+# urls.py
+from django.urls import path, re_path
+```
+
+- in urlPatters you can search for a specific year using regex
+
+```python
+re_path(r'^article/(?P<year>[0-9]{4})/$', views.article_by_year, name="article_by_year"),
+```
+
+- views.py
+
+```python
+def article_by_year(request, year):
+    return HttpResponse(f"<h1>Articles from the year {year}</h1>")
+```
+
+- then you can get 2026 article using
+
+```python
+http://127.0.0.1:8000/blog/article/2026/
+```
+
+
 
