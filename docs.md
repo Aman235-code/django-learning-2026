@@ -246,5 +246,28 @@ def article_by_year(request, year):
 http://127.0.0.1:8000/blog/article/2026/
 ```
 
+## kwargs 
+
+- kwargs stands for keyword arguments
+
+```python
+def article_details(request, year, month):
+    return HttpResponse(f"<h1>Articles: from {year} - {month}</h1>")
+
+def article_details(request, **kwargs):
+    return HttpResponse(f"<h1>Articles from {kwargs['year']} - {kwargs['month']} - {kwargs['day']}</h1>")
+```
+
+- urls file (here you can add day too without changing that function)
+
+```python
+path('article/<int:year>/<int:month>/<int:day>', views.article_details, name="article_details"),
+```
+
+- then you can directly use both year and month
+
+```python
+http://127.0.0.1:8000/blog/article/2026/4/30
+```
 
 
