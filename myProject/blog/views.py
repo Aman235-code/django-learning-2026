@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from datetime import datetime
 
 # Create your views here.
 def home(request):
@@ -25,3 +26,28 @@ def article_details(request, **kwargs):
 
 def post_list(request):
     return render(request, 'blog/post_list.html')
+
+class User:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+def user_info(request):
+
+    context = {
+        "name": "Alice",
+        "age": 30,
+        "skill": ["Django", "Python", "JavaScript"],
+        "user": User("Bob", 25),
+        "blog": {
+            "title": "My First Blog",
+            "author": {
+                "name": "Charlie",   
+            },
+            "content": "<b>This is the content of my first blog post</b>.",
+            "created_at": datetime(2025, 1, 15, 10, 30) # y, m, d, h, m
+        },
+        "empty_value": None
+    }
+
+    return render(request, 'blog/user_info.html', context)

@@ -376,3 +376,4 @@ def post_list(request):
 ```
 
 - create the template folder in parallel to the app folder in which you have html template inherited by other apps
+

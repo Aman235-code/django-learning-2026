@@ -10,4 +10,6 @@ urlpatterns = [
     path('article/<int:year>/<int:month>/<int:day>', views.article_details, name="article_details"),
 
     path('posts/', views.post_list, name="post_list"),
+
+    path('user-info/', views.user_info, name="user_info"),
 ]
