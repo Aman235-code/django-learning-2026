@@ -291,7 +291,7 @@ http://127.0.0.1:8000/blog/article/2026/4/30
 # or
 'DIRS': [BASE_DIR / 'templates'], # no need to import os here
 ```
-- you can create views file in projects folder and make changes i urls file
+- you can create views file in projects folder and make changes in urls file
 - then in views file you can pass templates using
 
 ```python
@@ -320,7 +320,7 @@ def home(request):
 ### App level template setup
 
 - after creating project and apps configure settings.py
-- create templates folder in project's folder and create base.html file
+- create templates folder in root folder and create base.html file
 - this template is used by all the apps
 - you have to create templates folder in both the apps folder, also configure urls.py
 
@@ -334,4 +334,45 @@ def post_list(request):
 ```
 
 - here we can only render the html pages created inside the apps folder
-- the templates we are creating inside the main project's folder is inherited by all the oter apps
+- the templates we are creating inside the root folder is inherited by all the oter apps
+
+## Project Templates Connect with Apps
+
+- after creating templates folder in your root folder create base.html file
+- here you can write base template and dynamic content using {% %}
+- in base.html of root folder
+
+```python
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} My Django Project {% endblock %}</title>
+</head>
+<body>
+    <h1>welcome to my project</h1>
+    <hr/>
+    {% block content %}
+    
+    {% endblock %}
+</body>
+</html>
+```
+
+- after that create templates folder and html file in your apps folder
+- you dont have to write anything from the scratch again as we have defined the base template
+- eg in post_list.html 
+
+```python
+{% extends "base.html" %}
+
+{% block title %} Blog Posts {% endblock %}
+
+{% block content %}
+    <h1>Blog posts</h1>
+    <p>Here is latest blog posts</p>
+{% endblock %}
+```
+
+- create the template folder in parallel to the app folder in which you have html template inherited by other apps

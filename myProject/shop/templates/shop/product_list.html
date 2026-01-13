@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shop page title</title>
-  </head>
-  <body>
-    <h1>welcome to my shop</h1>
-    <p>this is the product page for django project</p>
-  </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %} Shop Posts {% endblock %}
+
+{% block content %}
+    <h1>Shop products</h1>
+    <p>Shop product listing page</p>
+{% endblock %}
