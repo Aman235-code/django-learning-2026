@@ -188,6 +188,8 @@ urlpatterns = [
 
 ## URL Parameters (path, re_path, kwars)
 
+### path
+
 - if you have paramter in views 
 
 ```python
