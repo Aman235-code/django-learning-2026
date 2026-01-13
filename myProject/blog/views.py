@@ -27,6 +27,7 @@ def article_details(request, **kwargs):
 def post_list(request):
     return render(request, 'blog/post_list.html')
 
+# Template #1
 class User:
     def __init__(self, name, age):
         self.name = name
@@ -51,3 +52,20 @@ def user_info(request):
     }
 
     return render(request, 'blog/user_info.html', context)
+
+# Template #2
+def blog_details(request):
+
+    post = {
+        "title": "Understanding Django Views",
+        "description": "A comprehensive guide to Django views.",
+        "author": None,
+        "content": "This post explains how Django views work in detail.",
+        "created_at": datetime(2024, 5, 20, 14, 0),
+        "comments_count": 5,
+        "tags": ["Django", "Web Development", "Python"],
+        "price": 100,
+        "number": 7
+    }
+
+    return render(request, 'blog/blog_details.html', {"post": post})

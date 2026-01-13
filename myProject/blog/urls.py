@@ -12,4 +12,5 @@ urlpatterns = [
     path('posts/', views.post_list, name="post_list"),
 
     path('user-info/', views.user_info, name="user_info"),
+    path('blog-details/', views.blog_details, name="blog_details"),
 ]
