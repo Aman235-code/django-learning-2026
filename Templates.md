@@ -160,3 +160,93 @@ def user_info(request):
     <p><b>Title Encode:</b> {{post.title|urlencode}}</p>
     <p><b>Float Format:</b> {{123.4567891|floatformat:2}}</p>
 ```
+
+## Templates #3
+
+### Tags (Conrol flow)
+
+```python
+
+  blogs = [
+        {"title": "Django Basics","is_featured":True, "author": "Alice", "content": "An introduction to Django."},
+        {"title": "Advanced Django","is_featured":False, "author": "Bob", "content": "Deep dive into Django features."},
+        {"title": "Django Templates","is_featured":False, "author": "Charlie", "content": "Understanding Django templating system."},
+    ]
+    context = {
+        "blog":blogs,
+        "today": datetime.now(),
+        "html_code": "<h1>This is a heading</h1><p>This is a paragraph.</p>"
+    }
+    return render(request, 'blog/blog_list.html', context)
+```
+
+- template filters
+
+```python
+ <h1>Blog Tags Page</h1>
+    <p>{{today}}</p>
+
+    {% comment %} If Else {% endcomment %} {% if blog.0.is_featured %}
+    <h2>Featured Blog: {{ blog.0.title }}</h2>
+    {% else %}
+    <h2>No Featured Blogs</h2>
+    {% endif %} 
+    
+    
+    {% comment %} For Loop {% endcomment %}
+    <ul>
+      {% for post in blog %}
+      <li>
+        {{forloop.counter}}. {{ post.title }} - {{ post.content }}
+      </li>
+      {% empty %}
+      <li>No blog posts available.</li>
+      {% endfor %}
+    </ul>
+
+    {% comment %} with {% endcomment %}
+    {% with total_posts=blog|length %}
+    <p>Total Blog Posts: {{ total_posts }}</p>
+    {% endwith %}
+
+    <hr/>
+
+    {% comment %} cycle {% endcomment %}
+    <h2>Blogs in Table</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+      <tr>
+        <th>Title</th>
+        <th>Content</th>
+      </tr>
+      {% for post in blog %}
+      <tr style="background-color: {% cycle 'lightblue' 'lightgreen'  %} ">
+        <td>{{ post.title }}</td>
+        <td>{{ post.content }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <hr/>
+    {% comment %} FirstOf {% endcomment %}
+    <p>Author: {% firstof blog.0.author "Anonymous" %}</p>
+
+    <hr/>
+    {% comment %} verbatim {% endcomment %}
+    <h2>Verbatim Example</h2>
+    {% verbatim %}
+    <p>Author : {{blog.1.author}}</p>
+    {% endverbatim %}
+
+    {% comment %} autoescape {% endcomment %}
+    <h2>Autoescape Example</h2>
+    <p>Default(Safe escaped): {{html_code}}</p>
+   
+
+
+    {% autoescape off %}
+    <p>{{ html_code }}</p>
+    {% endautoescape %}
+
+    {% comment %} or  {% endcomment %}
+    {% comment %} <p>Default(Safe escaped): {{html_code|safe}}</p> {% endcomment %}
+```

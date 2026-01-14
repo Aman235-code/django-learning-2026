@@ -69,3 +69,18 @@ def blog_details(request):
     }
 
     return render(request, 'blog/blog_details.html', {"post": post})
+
+# Template #3
+
+def blog_list(request):
+    blogs = [
+        {"title": "Django Basics","is_featured":True, "author": "Alice", "content": "An introduction to Django."},
+        {"title": "Advanced Django","is_featured":False, "author": "Bob", "content": "Deep dive into Django features."},
+        {"title": "Django Templates","is_featured":False, "author": "Charlie", "content": "Understanding Django templating system."},
+    ]
+    context = {
+        "blog":blogs,
+        "today": datetime.now(),
+        "html_code": "<h1>This is a heading</h1><p>This is a paragraph.</p>"
+    }
+    return render(request, 'blog/blog_list.html', context)
