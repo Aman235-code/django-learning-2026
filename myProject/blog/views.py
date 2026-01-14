@@ -84,3 +84,13 @@ def blog_list(request):
         "html_code": "<h1>This is a heading</h1><p>This is a paragraph.</p>"
     }
     return render(request, 'blog/blog_list.html', context)
+
+# Templated #5
+
+def blog(request):
+    students_list = [
+        {"name":"Alice", "class": "10th"},
+        {"name":"Bob", "class": "9th"},
+        {"name":"Charlie", "class": "8th"},
+    ]
+    return render(request, 'blog/blog.html', {"students": students_list})

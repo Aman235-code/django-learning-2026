@@ -334,3 +334,67 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
     </ul>
 </nav>
 ```
+
+## Templates #5
+
+### Advanced & Rare Tags
+
+- we have more tags just fir advance 
+
+```python
+  students_list = [
+        {"name":"Alice", "class": "10th"},
+        {"name":"Bob", "class": "9th"},
+        {"name":"Charlie", "class": "8th"},
+    ]
+    return render(request, 'blog/blog.html', {"students": students_list})
+```
+
+
+```python
+{% extends "base.html" %}
+
+{% block title %} Blog Page {% endblock %}
+
+
+{% block content %}
+    <h1>Blog Us</h1>
+    {% regroup students by class as grouped_students %}
+    <ul>
+        {% for group in grouped_students  %}
+        <li>
+            <strong>Class: {{ group.grouper }}</strong>
+            <ul>
+                {% for student in group.list %}
+                <li>{{ student.name }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+    <p>
+        {% comment %} 50/100 * 100  {% endcomment %}
+        Progress : {% widthratio 50 100 100 %} %
+    </p>
+    {% spaceless %}
+    <div>
+        <h3>   This is    a    spaced   less    example.    </h3>
+        <p>
+            The    extra    spaces    in    this    div    will    be    removed.
+        </p>
+    </div>
+    {% endspaceless %}
+
+    {% comment %} block filter  {% endcomment %}
+    {% filter upper %}
+        this is converted to uppercase
+    {% endfilter %}
+
+    {% comment %} inline filter  {% endcomment %}
+    {% for student in students %}
+        <p>{{student.name|lower}} in class {{student.class|add:"+1"}}</p>
+    {% endfor %}
+
+
+{% endblock %}
+```
