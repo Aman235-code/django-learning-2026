@@ -4,10 +4,10 @@ from datetime import datetime
 
 # Create your views here.
 def home(request):
-    return HttpResponse("<h1>Blog Home page</h1>")
+    return render(request, 'home.html') # takes from main root folder templates
 
 def about(request):
-    return HttpResponse("<h1>Blog About page</h1>")
+    return render(request, 'blog/about.html')
 
 def post_details(request, post_id):
     return HttpResponse(f"<h1>Details of post {post_id}</h1>")

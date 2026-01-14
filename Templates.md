@@ -250,3 +250,87 @@ def user_info(request):
     {% comment %} or  {% endcomment %}
     {% comment %} <p>Default(Safe escaped): {{html_code|safe}}</p> {% endcomment %}
 ```
+
+## Templates #4
+
+### Inheritance & Staticn 
+
+- template folder having reusable html code is created inside the root folder
+- static folder(css, js, images) also created inside the root folder
+- you need to register this in settings.py go to the last and add 
+
+```python
+STATICFILES_DIRS = [BASE_DIR / 'static']
+```
+- then we can load css, js, images in template usign load static
+- you can import template from another template using include "template.html"
+- base.html of root folder
+
+
+```python
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} My Django Project {% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    {% include "navbar.html" %}
+    <h1>welcome to my project</h1>
+    <hr/>
+    <div class="content">
+    {% block content %} 
+    {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2026 my site</p>
+    </footer>
+
+    <script src="{% static 'js/scripts.js' %}"></script>
+   
+</body>
+</html>
+```
+
+- you can also use images after writing load static
+- csrf - cross site request forgery used for security purpose to prevent xss attacks
+
+
+```python
+# home.html
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Home - My Django Project {% endblock %}
+
+{% block content %}
+    <h2>Welcome to the Home Page</h2>
+    <p>This is the home page of my Django project.</p>
+    <img src="{% static 'images/logo.jpg' %}" alt="Home Image" />
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required placeholer="username"/>
+        <input type="password" name="password" placeholder="password" />
+        <button type="submit">Submit</button>
+    </form>
+
+    <button onclick="showAlert()">Click Me</button>
+
+{% endblock %}
+```
+
+- for navbar routing you have change href attribute with url and write the name that you have written in name value of views.py file
+
+```python
+<nav>
+    <ul>
+        <li><a href="{% url 'blog-home' %}">Home</a></li>
+        <li><a href="{% url 'blog-about' %}">About</a></li>
+    </ul>
+</nav>
+```

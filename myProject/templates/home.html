@@ -1,12 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My first web page</title>
-</head>
-<body>
-   <h1 style="color:red">Hello world</h1>
-   <p>This is my first project</p> 
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Home - My Django Project {% endblock %}
+
+{% block content %}
+    <h2>Welcome to the Home Page</h2>
+    <p>This is the home page of my Django project.</p>
+    <img src="{% static 'images/logo.jpg' %}" alt="Home Image" />
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required placeholer="username"/>
+        <input type="password" name="password" placeholder="password" />
+        <button type="submit">Submit</button>
+    </form>
+
+    <button onclick="showAlert()">Click Me</button>
+
+{% endblock %}

@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} My Django Project {% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+    {% include "navbar.html" %}
     <h1>welcome to my project</h1>
     <hr/>
-    {% block content %}
-    
+    <div class="content">
+    {% block content %} 
     {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2026 my site</p>
+    </footer>
+
+    <script src="{% static 'js/scripts.js' %}"></script>
+   
 </body>
 </html>
+
