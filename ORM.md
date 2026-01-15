@@ -42,3 +42,36 @@ python manage.py migrate
 ## Retrieving Data from Database
 
 - Django ORM QuerySet(Collection of rows)
+
+- python manage.py shell -> shell command
+- to retrieve data using shell
+
+- all() -> fetches all records
+
+```python
+>>> from blog.models import Student
+>>> student = Student.objects.all()
+>>> print(student)
+```
+
+- to print the data 
+
+```python
+for s in student:
+    print(s.name, s.age, s.city)
+```
+- get() -> fetches single record (error if multiple/none)
+- to get one record
+
+```python
+>>> students = Student.objects.get(id = 1) 
+>>> print(students)
+```
+
+- filter() -> fetchs record with condition
+
+```python
+>>> students = Student.objects.filter(age=20) 
+>>> print(students)
+```
+
