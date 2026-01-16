@@ -6,8 +6,8 @@ class Student(models.Model):
     age = models.IntegerField()
     city = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
     
 class Profile(models.Model):
     bio = models.TextField()
@@ -16,3 +16,4 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.location
+    
