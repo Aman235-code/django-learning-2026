@@ -41,6 +41,8 @@ python manage.py migrate
 
 ## Retrieving Data from Database
 
+### Using Shell
+
 - Django ORM QuerySet(Collection of rows)
 
 - python manage.py shell -> shell command
@@ -75,3 +77,52 @@ for s in student:
 >>> print(students)
 ```
 
+- ordering and chaining
+
+```python
+>>> from blog.models import Student
+>>> students = Student.objects.all().order_by("name")
+>>> students = Student.objects.all().order_by("age")
+>>> students = Student.objects.all().order_by("-age") # descending
+>>> print(students)
+```
+
+- chaining 
+
+```python
+>>> students = Student.objects.filter(city="Delhi").filter(age__gte = 18).order_by("name") 
+>>> print(students)  
+```
+
+- exclude (skip this row)
+
+```python
+>>> students = Student.objects.exclude(city="Delhi")   
+```
+
+- values (returns data in the frm of dictionaries)
+
+```python
+students = Student.objects.values("name", "city") 
+```
+
+- value list -> in form of List
+
+```python
+>>> students = Student.objects.values_list("name", flat=True)
+```
+
+- First & Last
+
+```python
+>>> students = Student.objects.first()       
+>>> students = Student.objects.last()
+```       
+
+- count - returns no of rows
+
+```python
+>>> students = Student.objects.count()
+```
+
+### Using Template
