@@ -29,6 +29,7 @@ class Student(models.Model):
 
 ```python
 python manage.py makemigrations
+python manage.py makemigrations appname (only changes apply to appname)
 ```
 - it creates a file inside the migrations folder
 - then we have to migrate these changes in the db
@@ -47,6 +48,13 @@ python manage.py migrate
 
 - python manage.py shell -> shell command
 - to retrieve data using shell
+
+- to create the row
+
+```python
+from portfolio.models import Student
+Student.objects.create(name="Aman", age=20, city="Delhi")
+```
 
 - all() -> fetches all records
 
@@ -126,3 +134,14 @@ students = Student.objects.values("name", "city")
 ```
 
 ### Using Template
+
+- once you have defined models created data and migrated in views.py you can get the data through
+
+```python
+from .models import Student
+
+def student_list(request):
+    students = Student.objects.all() # retrives all the rows from the table Student
+    return render(request, 'portfolio/student_list.html', {'students': students})
+```
+
