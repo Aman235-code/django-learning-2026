@@ -78,3 +78,36 @@ def student_update(request, pk):
         form = StudentForm(instance=student)
     return render(request, 'student_form.html', {'form': form})
 ```
+
+- delete
+
+```python
+def student_delete(request, pk):
+    student = get_object_or_404(Student, pk=pk)
+    if request.method == 'POST':
+        student.delete()
+        return redirect('student_list')
+    return render(request, 'student_confirm_delete.html', {'student': student})
+```
+
+- html render for delete
+
+```python
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Delete</title>
+</head>
+<body>
+    <h1>Confirm Delete Student</h1>
+    <p>Are you sure you want to delete the student: <strong>{{ student.name }}</strong>?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+        <a href="{% url 'student_list' %}">Cancel</a>
+    </form>
+</body>
+</html>
+```
