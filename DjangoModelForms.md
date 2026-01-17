@@ -50,3 +50,5 @@ def student_create(request):
 </html>
 ```
 
+## ModelForms - List & Detail (Update & Delete)
+
