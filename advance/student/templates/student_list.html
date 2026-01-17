@@ -13,7 +13,9 @@
         <li>
             <a href="{% url 'student_detail' s.id %}">
                 {{ s.name }} - {{ s.age }} - {{ s.email }}</li>
-            </a>
+            </a> |
+            <a href="{% url 'student_update' s.id %}">Edit</a>
+        </li>
             
     {% endfor %}
    </ul>
