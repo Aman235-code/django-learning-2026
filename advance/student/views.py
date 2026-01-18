@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import StudentForm
 from .models import Student
+from django.contrib import messages
 
 # Create your views here.
 def student_create(request):
@@ -37,3 +38,11 @@ def student_delete(request, pk):
         student.delete()
         return redirect('student_list')
     return render(request, 'student_confirm_delete.html', {'student': student})
+
+def show_message(request):
+    messages.debug(request, 'This is a debug message.')
+    messages.info(request, 'This is an informational message.')
+    messages.success(request, 'This is a success message.')
+    messages.warning(request, 'This is a warning message.')
+    messages.error(request, 'This is an error message.')
+    return render(request, 'show_message.html')
