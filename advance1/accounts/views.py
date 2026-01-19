@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .forms import ResgistrationForm
+from .forms import ResgistrationForm, ProfileForm
+from .models import Profile
 
 # Create your views here.
 def register(request):
@@ -41,3 +42,20 @@ def logout(request):
 @login_required(login_url='login')
 def dashboard(request):
     return render(request, 'accounts/dashboard.html')   
+
+def upload_profile(request):
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile Picture Uploaded successfully')
+            return redirect('view_profile')
+        else:
+            messages.error(request, "Error Uploading profile picture")
+    else:
+        form = ProfileForm()
+    return render(request, 'accounts/upload_profile.html', {'form':form})
+
+def view_profile(request):
+    profile = Profile.objects.all()
+    return render(request, 'accounts/view_profile.html', {'profiles':profile})

@@ -6,6 +6,12 @@
     <title>Auth Demo</title>
 </head>
 <body>
+
+    <a href="{% url 'upload_profile' %}">Upload Profile</a>
+    <a href="{% url 'view_profile' %}">Show Profile</a>
+
+    <hr/>
+    
     {% if messages %}
     <ul>
         {% for message in messages %}
@@ -21,6 +27,8 @@
     {% endif %}
 
     <hr/>
+
+    
 
     {% block content %}
     {% endblock %}
