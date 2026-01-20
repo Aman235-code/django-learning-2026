@@ -88,3 +88,77 @@ def post_list(request):
 </body>
 </html>
 ```
+
+## Search & Filters
+
+- you can search using Q object
+
+```python
+from django.shortcuts import render
+from .models import Post, MainBlog
+from django.core.paginator import Paginator
+from django.db.models import Q
+
+
+def post_list1(request):
+    query = request.GET.get('q') # search keyword
+    category = request.GET.get('category') # category filter
+
+    posts = MainBlog.objects.all()
+
+    # Search using Q object
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) 
+        )
+
+    # filter by category
+    if category:
+        posts = posts.filter(category__iexact=category)
+
+    return render(request, 'blog/post_res.html', {'posts': posts, 'query': query, 'category': category})
+```
+
+- template you can render as 
+
+```python
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Result Search & Filter</title>
+
+</head>
+<body>
+    <h1>Search & Filter Exmaple</h1>
+
+    <form method="GET" class="search-form">
+        <input type="text" name="q" placeholder="Search..." value={{ query }}>
+      
+
+        <select name="category">
+            <option value="">All Categories</option>
+            <option value="Tech" {% if category == "Tech" %} selected{% endif %}>Tech</option>
+            <option value="News" {% if category == "News" %} selected{% endif %}>News</option>
+            <option value="Tutorial" {% if category == "Tutorial" %} selected{% endif %}>Tutorial</option>
+        </select>
+
+          <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        {% for post in posts %}
+        <li>
+            <h2>{{post.title}}</h2>
+            <p>{{post.content}}</p>
+            <p><strong>Category:</strong> {{post.category}}</p>
+        </li>
+        {% empty %}
+            <li>No posts found</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+```
