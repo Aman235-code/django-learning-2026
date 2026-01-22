@@ -30,3 +30,32 @@ def delete_session(request):
     request.session.flush() # delete all session data
     return HttpResponse("All session data deleted successfully.")
 ```
+
+## Django Cookies
+
+- stores small info in browser's side
+- not much secure
+- data stored in key-value pairs (limited size 4kb)
+
+```python
+def set_cookie(request):
+    response = HttpResponse("Cookie Set Successfully")
+    response.set_cookie('username', 'Aman', max_age=60*60*24*7) # 7 days
+    response.set_cookie('course', 'Django full Course', max_age=60*60*24) # 1 day
+    return response
+
+def get_cookie(request):
+    username = request.COOKIES.get('username', 'Guest')
+    course = request.COOKIES.get('course', 'No Course Selected')
+    # return HttpResponse(f"Username: {username}, Course : {course}")
+    if 'username' in request.COOKIES:
+        return HttpResponse(f"Username: {username}, Course : {course}")
+    else:
+        return HttpResponse("No Cookies Found")
+    
+def delete_cookie(request):
+    response = HttpResponse("Cookie Deleted Successfully")
+    response.delete_cookie('username')
+    response.delete_cookie('course')
+    return response
+```
