@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333333;
+        }
+        p {
+            color: #666666;
+        }
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Our Service, {{ user.first_name }}!</h1>
+        <h2>{{blog_name}} is my blog name </h2> 
+        <p>We're excited to have you on board. Here are some resources to get you started:</p>
+        <ul>
+            <li><a href="https://example.com/getting-started">Getting Started Guide</a></li>
+            <li><a href="https://example.com/support">Support Center</a></li>
+            <li><a href="https://example.com/community">Community Forums</a></li>
+        </ul>
+        <p>If you have any questions, feel free to reply to this email or reach out to our support team.</p>
+        <p>Best regards,<br>The Team</p>
+    </div>
+</body>
+</html>
