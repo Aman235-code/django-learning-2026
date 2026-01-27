@@ -117,17 +117,25 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# CACHES = {
+#     'default': {
+#         # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#         # 'LOCATION': 'unique-snowflake',
+
+#         # file based cache
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': BASE_DIR / 'my_cache', # secify cache directory
+#         'TIMEOUT': 300, # 300 seconds -> 5 min
+#         'OPTIONS': {
+#             'MAX_ENTRIES': 1000 # max no of entries in cache
+#         }
+#     }
+# }
+
 CACHES = {
     'default': {
-        # 'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        # 'LOCATION': 'unique-snowflake',
-
-        # file based cache
+        # per view cache
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': BASE_DIR / 'my_cache', # secify cache directory
-        'TIMEOUT': 300, # 300 seconds -> 5 min
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000 # max no of entries in cache
-        }
+        'LOCATION': BASE_DIR / 'file_cache', # secify cache directory
     }
 }

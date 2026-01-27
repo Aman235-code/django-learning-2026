@@ -82,6 +82,10 @@ class UserProfile(models.Model):
 
 
 ```python
+from django.shortcuts import render
+from .models import YoutubeUser, UserProfile, UserList
+from django.core.cache import cache
+
 def user_profile_list(request):
     users_data = cache.get('users_data')
 
@@ -94,3 +98,34 @@ def user_profile_list(request):
          print('Fecthing data from cache')
     return render(request, 'user_profile_list.html',{ 'users': users_data})
 ```
+
+## Per View Cache
+
+- settings.py
+
+```python
+CACHES = {
+    'default': {
+        # per view cache
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': BASE_DIR / 'file_cache', # secify cache directory
+    }
+}
+```
+
+- views.py
+
+```python
+from django.shortcuts import render
+from .models import YoutubeUser, UserProfile, UserList
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
+
+
+@cache_page(30) # cache this view for 30 sec
+def user_two(request):
+    print('Fecthing data from database')
+    users = UserList.objects.all()
+    return render(request, 'users.html', {'users': users})
+```
+
