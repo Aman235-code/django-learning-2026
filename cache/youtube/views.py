@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import YoutubeUser, UserProfile, UserList
+from .models import YoutubeUser, UserProfile, UserList, UserDBProfile
 from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from django.http import HttpResponse
@@ -42,3 +42,14 @@ def user_two(request):
 def clear_cache(request):
     cache.clear()
     return HttpResponse("Cache Cleared")
+
+def user_db_list(request):
+    users = cache.get('users_list')
+    if not users:
+        print("Fetching from Database")
+        users = UserDBProfile.objects.all()
+        cache.set('users_list', users, 60)
+    else:
+        print("Fetching from cache")
+
+    return render(request, 'users_db.html', {'users': users})

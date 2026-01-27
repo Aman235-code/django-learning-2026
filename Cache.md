@@ -177,3 +177,40 @@ def user_two(request):
   </body>
 </html>
 ```
+
+## Database Cache
+
+- setting.py
+
+```python
+CACHES = {
+    'default': {
+        # database cache
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table'
+    }
+}
+```
+
+- create that table using this command
+
+```python
+python manage.py createcachetable my_cache_table
+```
+
+- views 
+
+```python
+def user_db_list(request):
+    users = cache.get('users_list')
+    if not users:
+        print("Fetching from Database")
+        users = UserDBProfile.objects.all()
+        cache.set('users_list', users, 60)
+    else:
+        print("Fetching from cache")
+
+    return render(request, 'users_db.html', {'users': users})
+```
+
+- in that table data is cached

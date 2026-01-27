@@ -132,10 +132,18 @@ STATIC_URL = 'static/'
 #     }
 # }
 
+# CACHES = {
+#     'default': {
+#         # per view cache
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': BASE_DIR / 'file_cache', # secify cache directory
+#     }
+# }
+
 CACHES = {
     'default': {
-        # per view cache
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': BASE_DIR / 'file_cache', # secify cache directory
+        # database cache
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table'
     }
 }
