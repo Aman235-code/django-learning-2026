@@ -27,9 +27,15 @@ def user_profile_list(request):
          print('Fecthing data from cache')
     return render(request, 'user_profile_list.html',{ 'users': users_data})
 
-@cache_page(30) # cache this view for 30 sec
+# per view cache
+# @cache_page(30) # cache this view for 30 sec
+# def user_two(request):
+#     print('Fecthing data from database')
+#     users = UserList.objects.all()
+#     return render(request, 'users.html', {'users': users})
+
+# Template Fragment Cache take the same url
 def user_two(request):
-    print('Fecthing data from database')
     users = UserList.objects.all()
     return render(request, 'users.html', {'users': users})
 

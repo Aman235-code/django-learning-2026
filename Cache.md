@@ -129,3 +129,51 @@ def user_two(request):
     return render(request, 'users.html', {'users': users})
 ```
 
+## Template Fragment Cache
+
+- settings.py
+
+```python
+CACHES = {
+    'default': {
+        # per view cache
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': BASE_DIR / 'file_cache', # secify cache directory
+    }
+}
+```
+
+- views.py 
+
+```python
+# Template Fragment Cache take the same url
+def user_two(request):
+    users = UserList.objects.all()
+    return render(request, 'users.html', {'users': users})
+```
+
+- only in template we have to use cache
+
+```python
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Youtube users</title>
+  </head>
+  <body>
+    <h1>Youtube Users</h1>
+    {% load cache %}
+    {% cache 30 user_list_section %}
+    <ul>
+      {% for user in users %}
+      <li>
+        {{ user.name }} -  Subscribers: {{ user.subscriber }}
+      </li>
+      {% endfor %}
+    </ul>
+    {% endcache %}
+  </body>
+</html>
+```
