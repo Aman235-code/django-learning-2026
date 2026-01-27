@@ -51,3 +51,46 @@ class YoutubeUserAdmin(admin.ModelAdmin):
     actions = [clear_user_cache]
 ```
 
+## File Based Cache
+
+- settings.py at last
+
+```python
+CACHES = {
+    'default': {
+        # file based cache
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': BASE_DIR / 'my_cache', # secify cache directory
+        'TIMEOUT': 300, # 300 seconds -> 5 min
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000 # max no of entries in cache
+        }
+    }
+}
+```
+
+```python
+
+class UserProfile(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    sub = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name
+```
+
+
+```python
+def user_profile_list(request):
+    users_data = cache.get('users_data')
+
+    if users_data is None:
+        print('Fecthing data from database')
+        users_data = UserProfile.objects().all()
+        cache.set('users_data', users_data)
+    
+    else:
+         print('Fecthing data from cache')
+    return render(request, 'user_profile_list.html',{ 'users': users_data})
+```

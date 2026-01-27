@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import YoutubeUser
+from .models import YoutubeUser, UserProfile
 from django.core.cache import cache
 
 # Create your views here.
@@ -12,3 +12,15 @@ def user_list(request):
     else:
         print("Fetching from Cache")
     return render(request, 'user_list.html', {'users': users})
+
+def user_profile_list(request):
+    users_data = cache.get('users_data')
+
+    if users_data is None:
+        print('Fecthing data from database')
+        users_data = UserProfile.objects.all()
+        cache.set('users_data', users_data)
+    
+    else:
+         print('Fecthing data from cache')
+    return render(request, 'user_profile_list.html',{ 'users': users_data})

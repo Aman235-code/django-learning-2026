@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import YoutubeUser
+from .models import YoutubeUser, UserProfile
 from django.core.cache import cache
 from django.contrib import messages
 
@@ -14,3 +14,8 @@ class YoutubeUserAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'subscribers')
 
     actions = [clear_user_cache]
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+     list_display = ('name', 'email', 'sub')
+     search_fields = ('name', 'email')
