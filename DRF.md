@@ -42,3 +42,24 @@ def student_list(request):
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data)
 ```
+
+## Read API - Django Rest Framework
+
+- same as above
+
+```python
+class Student2Serializer(serializers.ModelSerializer):
+     class Meta:
+        model = Student2
+        fields = '__all__' # all fields
+```
+
+
+```python
+@api_view(['GET'])
+def get_students(request):
+    students = Student2.objects.all()
+    serializer = Student2Serializer(students, many=True)
+    return Response(serializer.data)
+```
+
