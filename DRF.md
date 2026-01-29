@@ -63,3 +63,14 @@ def get_students(request):
     return Response(serializer.data)
 ```
 
+## POST API
+
+```python
+@api_view(['POST'])
+def add_student(request):
+    serializer = Student2Serializer(data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+```
