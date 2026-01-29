@@ -91,3 +91,24 @@ def update_student(request, pk):
         return Response(serializer.data)
     return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 ```
+
+## PATCH API - DRF - only one field to update
+
+```python
+@api_view(['PUT', 'PATCH'])
+def update_student(request, pk):
+    try:
+        student = Student2.objects.get(id=pk)
+    except Student2.DoesNotExist:
+        return Response({"error":"Student not found"},status=status.HTTP_404_NOT_FOUND)
+    # Partial update 
+    if request.method == 'PATCH':
+        serializer = Student2Serializer(student, data = request.data, partial=True)
+    else:
+        serializer = Student2Serializer(student, data = request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+```
