@@ -400,3 +400,123 @@ def blog_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 ```
+
+### Token Authentication + IsAdminUser 
+
+- for this one in settings.py installed apps add this 
+
+```python
+ 'rest_framework',
+ 'rest_framework.authtoken',
+ 'api',
+]
+```
+
+- run migarations (migrate comand)
+- below settings.py 
+
+```python
+# REST Frsmework COnfiguration
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.IsAuthenticated',
+        #  'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+```
+
+- create signals.py in app folder
+
+```python
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver 
+from django.core.mail import send_mail
+from rest_framework.authtoken.models import Token # type: ignore
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+```
+
+- then in apps.py 
+
+```python
+from django.apps import AppConfig
+
+
+class ApiConfig(AppConfig):
+    name = 'api'
+
+    def ready(self):
+        import api.signals
+```
+
+- urls file 
+
+```python
+from django.urls import path 
+from . import views 
+from rest_framework.authtoken.views import obtain_auth_token # type: ignore
+
+urlpatterns = [
+    path('auth-token/', obtain_auth_token, name='api_token_auth'),
+    path('profile/', views.user_profile, name='user_profile'),
+    path('admin-panel/', views.admin_panel, name='admin_panel'),
+]
+```
+
+- views file
+
+```python
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.response import Response 
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.authentication import TokenAuthentication 
+from rest_framework.authtoken.models import Token 
+
+# api only for auth users
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def user_profile(request):
+    user = request.user
+    token, created = Token.objects.get_or_create(user=user)
+    return Response({
+        "username": user.username,
+        "email": user.email,
+        "is_staff": user.is_staff,
+    })
+
+# api only for admin users
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAdminUser])
+def admin_panel(request):
+    return Response({"message": f"Welcome to the admin panel, {request.user.username}"})
+```
+
+- in postman
+
+```python
+http://127.0.0.1:8000/api/auth-token/ (POST)
+
+{
+  "username":"admin",
+  "password": "admin"
+}
+```
+
+- you'll get a token
+- if you hit this http://127.0.0.1:8000/api/profile/ without any token it gives unauthrozied
+- goto header Authorization Token (your token) then you'll get the result
+- same for this url (GET) http://127.0.0.1:8000/api/admin-panel/ pass Token (token) in headers
+- if you create a new user in admin panel the default is_staff = false so if you hit admin panel it says You do not have permission to perform this action
