@@ -520,3 +520,118 @@ http://127.0.0.1:8000/api/auth-token/ (POST)
 - goto header Authorization Token (your token) then you'll get the result
 - same for this url (GET) http://127.0.0.1:8000/api/admin-panel/ pass Token (token) in headers
 - if you create a new user in admin panel the default is_staff = false so if you hit admin panel it says You do not have permission to perform this action
+
+### JWT Authentication + IsAuthenticatedOrReadOnly
+
+- for this you need to run 
+
+```python
+pip install djangorestframework-simplejwt
+```
+
+- in settings installed apps
+
+```python
+   'api',
+    'rest_framework',
+    'rest_framework_simplejwt',
+]
+```
+
+- settings.py at the last
+
+```python
+# Rest Frameork Configuaration
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+}
+```
+
+- urls of Main project
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView # type: ignore
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh')
+]
+```
+
+- views
+
+```python
+from rest_framework.response import Response # type: ignore
+from rest_framework.decorators import api_view, permission_classes # type: ignore
+from rest_framework.permissions import IsAuthenticatedOrReadOnly # type: ignore
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def post_list(request):
+    if request.method == 'GET':
+        return Response({"message": "List of posts public"})
+    elif request.method == 'POST':
+        return Response({"message": f"{request.user.username} only auth users post data"})
+```
+
+- GET
+- http://127.0.0.1:8000/api/posts/
+- you'll see -> 
+
+```python
+{
+  "message": "List of posts public"
+}
+```
+
+- post 
+- generate token
+- http://127.0.0.1:8000/api/token/ 
+- body
+
+```python
+{
+  "username": "admin",
+  "password": "admin"
+}
+```
+
+- you'll get both refresh and access token
+
+- then go to http://127.0.0.1:8000/api/posts/ (post)
+- goto body and paste
+
+```python
+{
+  "message":"test"
+}
+```
+
+- and paste that accesstoken in headers Authorization Bearer (token)
+- then you'll see this
+
+```python
+{
+  "message": "admin only auth users post data"
+}
+```
+
+- for refresh token 
+- http://127.0.0.1:8000/api/token/refresh (POST)
+- in body 
+
+```python
+{
+    "refresh": (refresh token got from api/token)
+}
+```
