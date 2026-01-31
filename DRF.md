@@ -252,3 +252,31 @@ urlpatterns = [
     path('students/<int:pk>',StudentRetrieveUpdateDeleteAPI.as_view())
 ]
 ```
+
+## DRF CRUD Using ModelViewSet + Routers
+
+```python
+from rest_framework import viewsets
+from .models import Student 
+from .serializers import StudentSerializer
+
+# Full CRUD 
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+```
+
+- urls file
+
+```python
+from django.urls import path, include 
+from rest_framework.routers import DefaultRouter # type: ignore
+from .views import StudentViewSet
+
+router = DefaultRouter()
+router.register('students', StudentViewSet, basename='student')
+
+urlpatterns = [
+    path('', include(router.urls))
+]
+```
