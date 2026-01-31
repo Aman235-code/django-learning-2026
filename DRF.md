@@ -196,3 +196,59 @@ urlpatterns = [
     path('students/<int:pk>',StudentAPI.as_view())
 ]
 ```
+
+## DRF CRUD Using Generic API View + Mixins
+
+```python
+from rest_framework import generics, mixins
+from .models import Student 
+from .serializers import StudentSerializer
+
+class StudentListCreateAPI(
+    generics.GenericAPIView,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin
+):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    # Read all data
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+class StudentRetrieveUpdateDeleteAPI(
+    generics.GenericAPIView,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin
+):
+
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    # single data
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    # update
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+```
+
+- urls file
+
+```python
+from django.urls import path
+from .views import StudentListCreateAPI, StudentRetrieveUpdateDeleteAPI
+
+urlpatterns = [
+    path('students/', StudentListCreateAPI.as_view()),
+    path('students/<int:pk>',StudentRetrieveUpdateDeleteAPI.as_view())
+]
+```
