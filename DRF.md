@@ -345,3 +345,58 @@ def private_view(request):
     return Response({"message": f"Hello, {request.user.username}. This is a private view."})
 ```
 
+### Session Authentication + IsAuthenticatedOrReadOnly
+
+- settings file
+
+```python
+# REST Frsmework COnfiguration
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.IsAuthenticated',
+         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+}
+```
+
+- create models and serializers for this
+
+- urls file
+
+```python
+from django.urls import path 
+from . import views 
+
+urlpatterns = [
+    path('blogs/', views.blog_list, name='blog_list'),
+]
+```
+
+- views
+
+```python
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Blog
+from .serializers import BlogSerializer
+from rest_framework import status 
+
+@api_view(['GET', 'POST'])
+def blog_list(request):
+    if request.method == 'GET':
+        blogs = Blog.objects.all()
+        serializer = BlogSerializer(blogs, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = BlogSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+```
